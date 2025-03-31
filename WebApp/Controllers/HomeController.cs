@@ -17,15 +17,9 @@ public class HomeController(CompanyRepository companyRepository, SearchesReposit
     {
         var companies = await _companyRepository.GetCompanies();
         companies.OrderBy(x => x.Name).ToList();
-        // Sort the ResponseEntity by Response time 
         foreach (var company in companies)
-        {
-
             foreach (var search in company.SearchEntity)
-            {
                 search.ResponseEntity = search.ResponseEntity.OrderBy(r => r.ResponseDate).ToList();
-            }
-        }
 
         return View(companies);
     }
