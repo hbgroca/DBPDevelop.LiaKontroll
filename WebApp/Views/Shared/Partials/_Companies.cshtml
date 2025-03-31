@@ -1,0 +1,79 @@
+﻿@model CompanyEntity
+
+
+<div class="card-company expanded">
+    <div class="card-company-remove">
+        <form class="remove-form" asp-action="DeleteCompnay" asp-route-id="@Model.Id" method="post">
+            <button type="button" class="remove-btn pop-up-btn" @(Model.SearchEntity.Count() == 0 ? "" : "disabled") onclick="viewDeleteConfirmButtons(this)">
+                <span class="remove">&#x1F5D1;</span>
+                Radera
+            </button>
+            <div class="pop-up-remove-btns hidden">
+                <span>Säker på att du vill radera?</span>
+                <button type="submit" class="remove-btn">Ja</button>
+                <span>/</span>
+                <button type="button" class="remove-btn" onclick="viewDeleteConfirmButtons(this)">Nej</button>
+            </div>
+        </form>
+
+    </div>
+    <div class="card-body">
+        <h3 class="card-title">@Model.Name</h3>
+        <p class="card-text">@Model.Description</p>
+    </div>
+
+
+    <h5 class="searches-btns">Kontakter
+        <button 
+            class="btn" 
+            id="search-add-btn" 
+            data-open-modal="true"
+            data-company-id="@Model.Id"
+            data-modal="true"
+            data-target="#addSearchModal-@Model.Id">
+            + Lägg till
+        </button>
+        </h5>
+    <div class="test">
+        @foreach (var search in Model.SearchEntity)
+        {
+            search.CompanyEntityId = Model.Id;
+            <partial name="Partials/_Searches" model="search" />
+        }
+
+    </div>
+
+    <partial name="Partials/Modals/_AddSearchModal" model="new AddSearchFormModel{CompanyId = Model.Id}" />
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Handle modal opening for searches
+        document.addEventListener('click', function (event) {
+            if (event.target.matches('[data-open-modal="true"]')) {
+                var button = event.target;
+                var modalId = button.getAttribute('data-target');
+                var companyId = button.getAttribute('data-company-id');
+                var modal = document.querySelector(modalId);
+
+                if (modal) {
+                    var companyIdInput = modal.querySelector('input[name="CompanyId"]');
+                    if (companyIdInput) companyIdInput.value = companyId;
+
+                    modal.style.display = 'block';
+                }
+            }
+        });
+
+        // Close modals when clicking outside of them
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.modal-content') &&
+                !event.target.matches('[data-open-modal]')) {
+                document.querySelectorAll('.modal.addSearchModal').forEach(function(modal) {
+                    modal.style.display = 'none';
+                });
+            }
+        });
+
+    });
+</script>

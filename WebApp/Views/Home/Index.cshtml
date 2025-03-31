@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "LIA Tracker";
+}
+
+@model IEnumerable<CompanyEntity>
+
+<div class="companies-wrapper">
+    @foreach (var company in Model)
+    {
+        <partial name="Partials/_Companies" model="company" />
+    }
+</div>

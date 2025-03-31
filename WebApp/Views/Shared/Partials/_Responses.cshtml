@@ -1,0 +1,20 @@
+﻿@model ResponseEntity
+
+<div class="card-response @(Model.IsAnswer ? "isAnswer" : "")">
+    <form class="remove-form" asp-action="DeleteResponse" asp-route-id="@Model.Id" method="post">
+        <button type="button" class="remove-btn pop-up-btn") onclick="viewDeleteConfirmButtons(this)">
+            <span class="remove">&#x1F5D1;</span>
+            Radera
+        </button>
+        <div class="pop-up-remove-btns hidden">
+            <span>Säker på att du vill radera?</span>
+            <button type="submit" class="remove-btn">Ja</button>
+            <span>/</span>
+            <button type="button" class="remove-btn" onclick="viewDeleteConfirmButtons(this)">Nej</button>
+        </div>
+    </form>
+    <h5>@Model.ResponsePerson via @Model.ContactType.ContactType</h5>
+    <span>@Model.ResponseDate</span>
+    <span>@Model.ResponseContactInfo</span>
+    <p>@Model.Response</p>
+</div>

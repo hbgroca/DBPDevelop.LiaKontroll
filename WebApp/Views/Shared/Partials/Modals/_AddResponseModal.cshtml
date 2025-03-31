@@ -1,0 +1,60 @@
+﻿@model AddResponseFormModel
+
+<div id="addResponseModal-@Model.SearchEntityId" class="modal addResponseModal" style=" display:none">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h4>Lägg till svar</h4>
+            <button class="btn-close" data-close="true"> &#10006;</button>
+        </div>
+
+        <div class="form-wrapper">
+            <form id="form" asp-action="AddResponse" id="form" method="post" enctype="multipart/form-data" asp-antiforgery="true" novalidate>
+                <input asp-for="SearchEntityId" type="hidden" value="@Model.SearchEntityId"/>
+
+                <div class="form-group response-checkbox-container">
+                    <label asp-for="IsAnswer">Är svar? <input asp-for="IsAnswer" type="checkbox"></label>
+
+                    <span asp-validation-for="IsAnswer"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ResponsePerson"></label>
+                    <input asp-for="ResponsePerson" type="text">
+                    <span asp-validation-for="ResponsePerson"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ResponseContactInfo"></label>
+                    <input asp-for="ResponseContactInfo" type="text">
+                    <span asp-validation-for="ResponseContactInfo"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ResponseDate"></label>
+                    <input asp-for="ResponseDate" type="datetime-local" id="responseTimeInput">
+                    <span asp-validation-for="ResponseDate"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ContactTypeId"></label>
+                    <select asp-for="ContactTypeId">
+                        <option value="">Välj kontakttyp</option>
+                        @foreach (var contactType in await _contactTypeRepository.GetContactTypes())
+                        {
+                            <option value=@contactType.Id>@contactType.ContactType</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ContactTypeId"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Response"></label>
+                    <textarea asp-for="Response"></textarea>
+                    <span asp-validation-for="Response"></span>
+                </div>
+
+                <button class="btn" type="submit">Lägg till</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>

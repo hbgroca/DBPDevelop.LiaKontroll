@@ -1,0 +1,82 @@
+﻿@model SearchEntity
+
+<div class="card-response-wrapper">
+
+    <div class="card-search-remove">
+        <form class="remove-form" asp-action="DeleteSearch" asp-route-id="@Model.Id" method="post">
+            <button type="button" class="remove-btn pop-up-btn" @(Model.ResponseEntity.Count() == 0 ? "" : "disabled") onclick="viewDeleteConfirmButtons(this)">
+                <span class="remove">&#x1F5D1;</span>
+                Radera
+            </button>
+            <div class="pop-up-remove-btns hidden">
+                <span>Säker på att du vill radera?</span>
+                <button type="submit" class="remove-btn">Ja</button>
+                <span>/</span>
+                <button type="button" class="remove-btn" onclick="viewDeleteConfirmButtons(this)">Nej</button>
+            </div>
+        </form>
+
+    </div>
+
+
+    <div class="card-searches">
+        <div class="card-searches-headline">
+            <h5>&bull;</h5>
+            <h5>@Model.SearchTime</h5>
+            <h5>@Model.Headline</h5>
+        </div>
+        <p class="card-searches-headline-description">@Model.Description</p>
+    </div>
+
+    @foreach (var response in Model.ResponseEntity)
+    {
+        response.SearchEntityId = Model.Id;
+        <partial name="Partials/_Responses" model="response" />
+    }
+
+    <div class="card-response-buttons">
+        <button 
+            class="btn card-response-btn" 
+            id="response-add-btn" 
+            data-modal="true" 
+            data-search-id="@Model.Id"
+            data-open-modal-response="true" 
+            data-target="#addResponseModal-@Model.Id">
+            + Lägg till
+        </button>
+    </div>
+    <partial name="Partials/Modals/_AddResponseModal" model="new AddResponseFormModel(){SearchEntityId = Model.Id}" />
+</div>
+
+<script>
+    
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Handle modal opening for searches
+        document.addEventListener('click', function (event) {
+            if (event.target.matches('[data-open-modal-response="true"]')) {
+                var button = event.target;
+                var modalId = button.getAttribute('data-target');
+                var searchId = button.getAttribute('data-search-id');
+                var modal = document.querySelector(modalId);
+
+                if (modal) {
+                    var searchIdInput = modal.querySelector('input[name="SearchId"]');
+                    if (searchIdInput) searchIdInput.value = searchId;
+
+                    modal.style.display = 'block';
+                }
+            }
+        });
+        // Close modals when clicking outside of them
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.modal-content') &&
+                !event.target.matches('[data-open-modal-response]')) {
+                document.querySelectorAll('.modal.addResponseModal').forEach(function(modal) {
+                    modal.style.display = 'none';
+                });
+            }
+        });
+
+    });
+</script>

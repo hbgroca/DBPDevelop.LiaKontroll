@@ -1,0 +1,60 @@
+﻿@model AddSearchFormModel
+
+<div id="addSearchModal-@Model.CompanyId" class="modal addSearchModal" style="display:none">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h4>Lägg till sökning</h4>
+            <button class="btn-close" data-close="true"> &#10006;</button>
+        </div>
+
+        <div class="form-wrapper">
+            <form id="form-@Model.CompanyId" asp-action="AddSearch" id="form" method="post" enctype="multipart/form-data" asp-antiforgery="true" novalidate>
+                <input asp-for="CompanyId" type="hidden" value="@Model.CompanyId" />
+                <div class="form-group">
+                    <label asp-for="Headline"></label>
+                    <input asp-for="Headline" type="text">
+                    <span asp-validation-for="Headline"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <input asp-for="Description" type="text">
+                    <span asp-validation-for="Description"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SearchTime"></label>
+                    <input asp-for="SearchTime" type="datetime-local" id="searchTimeInput">
+                    <span asp-validation-for="SearchTime"></span>
+                </div>
+
+                <button class="btn" type="submit">Lägg till</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var input = document.getElementById('searchTimeInput-@Model.CompanyId');
+        if (input) {
+            // Format the value on page load
+            var value = input.value;
+            if (value) {
+                var date = new Date(value);
+                var formattedDate = date.toISOString().slice(0, 16);
+                input.value = formattedDate;
+            }
+
+            // Format the value on input event
+            input.addEventListener('input', function () {
+                var value = input.value;
+                if (value) {
+                    var date = new Date(value);
+                    var formattedDate = date.toISOString().slice(0, 16);
+                    input.value = formattedDate;
+                }
+            });
+        }
+
+    });
+</script>
